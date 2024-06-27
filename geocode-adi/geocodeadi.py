@@ -612,9 +612,9 @@ def blockgroup_to_adi(addresses_blockgroup_df):
     #open the 2022 file in adi_data and create two new columns for the 2022 ADI and the 2022 ADI Rank
     adi_2022_df = pandas.read_csv('adi_data/US_2022_ADI_Census_Block_Group_v4_0_1.csv')
     adi_2022_df['FIPS'] = adi_2022_df['FIPS'].astype(int).astype(str)
-    adi_2022_df['2012 National ADI Rank'] = adi_2022_df['ADI_NATRANK']
+    adi_2022_df['2022 National ADI Rank'] = adi_2022_df['ADI_NATRANK']
     adi_2022_df['2022 State ADI Rank'] = adi_2022_df['ADI_STATERNK']
-    adi_2022_df = adi_2022_df[['FIPS', '2012 National ADI Rank', '2022 State ADI Rank']]
+    adi_2022_df = adi_2022_df[['FIPS', '2022 National ADI Rank', '2022 State ADI Rank']]
     addresses_blockgroup_adi_df = addresses_blockgroup_adi_df.merge(adi_2022_df, on='FIPS')
 
     return addresses_blockgroup_adi_df
