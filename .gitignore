@@ -127,3 +127,10 @@ dmypy.json
 # PyCharm
 .idea
 .idea/*
+
+#ipynb
+*.ipynb_checkpoints
+*.ipynb
+
+#.csv
+*.csv

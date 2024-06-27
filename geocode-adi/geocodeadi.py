@@ -185,12 +185,15 @@ def filter_po_and_route_box_addresses(addresses_df):
             r'\b(?:R\.?R\.?|R\.?T\.?|ROUTE)\b[^,].+\b(?:BO?X)\b'
 
     # Identify PO and Route Boxes in the 'Address' column case insensitively.
-    print('Filtering out PO Boxes and Route Boxes from addresses...')
+
+    print(f'Filtering out PO Boxes and Route Boxes from addresses...')
     post_route_bool = addresses_df['Address'].str.contains(regex, regex=True, flags=re.IGNORECASE)
+
 
     # Filter out PO and Route Box addresses into a separate DataFrame.
     po_and_route_box_df = addresses_df.loc[post_route_bool]
     no_box_addresses_df = addresses_df.loc[~post_route_bool]
+    print(f'Filtered out {po_and_route_box_df.shape[0]} PO Boxes and Route Boxes from the address data {no_box_addresses_df}.')
 
     return no_box_addresses_df, po_and_route_box_df
 
