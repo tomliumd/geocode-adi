@@ -1,5 +1,43 @@
 # geocode-adi
 
+## To run this code you can do the following: At the bottom is instructions for geocode-adi which will help you understand the ADI better
+
+- To run fill_in_city_state_zip.py, you must have a google maps API key, the following command can be used in command line:
+```commandline
+python fill_in_city_state_zip.py -f [PATH_TO_ADDRESS_FILE] -k [GOOGLE_MAPS_API_KEY] -o [OUTPUT_FILE_NAME]
+python -m geocode-adi [OUTPUT_FILE_NAME]
+```
+
+- To assess successes and failures of the geocoding process, you can run the following commands in python
+
+```python
+import pandas as pd
+success = pd.read_csv('successful.csv')
+# fail = pd.read_csv('failed.csv')
+
+all_addresses = pd.read_csv('adi_pat_addresses.csv')
+failures = all_addresses[~all_addresses.ir_id.isin(success.ir_id)]
+
+#calculate the percentage of PO boxes
+regex = r'[p|P][\s]*[o|O][\s]*[b|B][\s]*[o|O][\s]*[x|X][\s]*[a-zA-Z0-9]*' \
+            r'|' \
+            r'\b[P|p]+(?:OST|ost|o|O)?\.?\s*[O|o|0]+(?:ffice|FFICE)?\.?\s*[B|b][O|o|0]?[X|x]+\.?\s+[#]?(?:\d+)*(?:\D+)*\b' \
+            r'|' \
+            r'\b(?:R\.?R\.?|R\.?T\.?|ROUTE)\b[^,].+\b(?:BO?X)\b'
+
+# Identify PO and Route Boxes in the 'Address' column case insensitively.
+print('Filtering out PO Boxes and Route Boxes from addresses...')
+print(failures[failures['Address'].str.contains(regex, regex=True, flags=re.IGNORECASE) == True].shape)
+
+#Number of missing addresses
+print('number of na addresses')
+print(failures.Address.isna().value_counts())
+
+#Number of failures
+print(failures[~(failures.Address.isna() | (failures['Address'].str.contains(regex, regex=True, flags=re.IGNORECASE) == True))].shape)
+
+```
+
 ## What is it?
 
 **geocode-adi** is a Python package that allows for the mapping of address information to Gopal K. Singh's 
@@ -75,6 +113,9 @@ its U.S. Census Block Group.
 4. The addresses that were mapped to ADI values through their U.S. Census Block Group are exported to a .CSV file 
 labeled ***successful.csv***. Addresses that failed to be converted to Census Block Groups are exported to a .CSV file 
 labeled ***failed.csv***.
+
+
+```
 
 ## License
 [MIT](LICENSE)
